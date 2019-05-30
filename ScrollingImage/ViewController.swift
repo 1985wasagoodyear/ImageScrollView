@@ -1,36 +1,44 @@
-//
-//  ViewController.swift
-//  ScrollingImage
-//
-//  Created by Kevin Yu on 11/14/18.
-//  Copyright © 2018 Kevin Yu. All rights reserved.
-//
-
 import UIKit
 import ImageScrollView
 
+extension UIView {
+    func setupToFill(superView: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        superView.addSubview(self)
+        leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true
+        trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive = true
+        topAnchor.constraint(equalTo: superView.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true
+    }
+}
+
 class ViewController: UIViewController {
 
-    @IBOutlet weak var scrollView: ImageScrollView!
+    @IBOutlet var imScrollView: ImageScrollView!
+    
+    override func loadView() {
+        super.loadView()
+        view.backgroundColor = .white
+        imScrollView = ImageScrollView(frame: view.frame)
+        imScrollView.setupToFill(superView: view)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.scrollView.image = UIImage(named: "ultimatecake.png")
-        self.scrollView.imageView.contentMode = .scaleAspectFit
+        imScrollView.image = UIImage(named: "ultimatecake.png")
+        imScrollView.imageView.contentMode = .scaleAspectFit
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
-        self.scrollView.addGestureRecognizer(tapGesture)
+        imScrollView.addGestureRecognizer(tapGesture)
     }
     
     @objc func tapAction() {
-        if (self.scrollView.tag == 0) {
-            self.scrollView.image = UIImage(named: "meowTheMagnificent.jpg")
-            self.scrollView.tag = 1
+        if (imScrollView.tag == 0) {
+            imScrollView.image = UIImage(named: "meowTheMagnificent.jpg")
+            imScrollView.tag = 1
         }
         else {
-            self.scrollView.image = UIImage(named: "ultimatecake.png")
-            self.scrollView.tag = 0
+            imScrollView.image = UIImage(named: "ultimatecake.png")
+            imScrollView.tag = 0
         }
     }
-
 }
-

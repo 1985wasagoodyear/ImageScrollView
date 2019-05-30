@@ -1,20 +1,12 @@
-//
-//  ImageScrollView.swift
-//  ScrollingImage
-//
-//  Created by Kevin Yu on 11/14/18.
-//  Copyright © 2018 Kevin Yu. All rights reserved.
-//
-
 import UIKit
 
 open class ImageScrollView: UIScrollView {
 
     open var image: UIImage! {
         didSet {
-            self.imageView.image = image
-            self.updateConstraintsForSize(self.bounds.size)
-            self.zoomScale = self.minimumZoomScale
+            imageView.image = image
+            updateConstraintsForSize(bounds.size)
+            zoomScale = minimumZoomScale
         }
     }
     
@@ -27,61 +19,60 @@ open class ImageScrollView: UIScrollView {
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        self.commonSetup()
+        commonSetup()
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.commonSetup()
+        commonSetup()
     }
     
     private func commonSetup() {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(imageView)
+        let imView = UIImageView()
+        imView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imView)
         
         // add constraints
-    
-        self.imageViewTopConstraint = NSLayoutConstraint(item: imageView,
+        imageViewTopConstraint = NSLayoutConstraint(item: imView,
                                                          attribute: .top,
                                                          relatedBy: .equal,
                                                          toItem: self,
                                                          attribute: .top,
                                                          multiplier: 1.0,
                                                          constant: 0.0)
-        self.imageViewLeadingConstraint = NSLayoutConstraint(item: imageView,
+        imageViewLeadingConstraint = NSLayoutConstraint(item: imView,
                                                          attribute: .leading,
                                                          relatedBy: .equal,
                                                          toItem: self,
                                                          attribute: .leading,
                                                          multiplier: 1.0,
                                                          constant: 0.0)
-        self.imageViewTrailingConstraint = NSLayoutConstraint(item: imageView,
+        imageViewTrailingConstraint = NSLayoutConstraint(item: imView,
                                                          attribute: .trailing,
                                                          relatedBy: .equal,
                                                          toItem: self,
                                                          attribute: .trailing,
                                                          multiplier: 1.0,
                                                          constant: 0.0)
-        self.imageViewBottomConstraint = NSLayoutConstraint(item: imageView,
+        imageViewBottomConstraint = NSLayoutConstraint(item: imView,
                                                          attribute: .bottom,
                                                          relatedBy: .equal,
                                                          toItem: self,
                                                          attribute: .bottom,
                                                          multiplier: 1.0,
                                                          constant: 0.0)
-        self.imageViewTopConstraint.isActive = true
-        self.imageViewLeadingConstraint.isActive = true
-        self.imageViewTrailingConstraint.isActive = true
-        self.imageViewBottomConstraint.isActive = true
+        imageViewTopConstraint.isActive = true
+        imageViewLeadingConstraint.isActive = true
+        imageViewTrailingConstraint.isActive = true
+        imageViewBottomConstraint.isActive = true
         
-        self.addConstraints([self.imageViewTopConstraint,
-                             self.imageViewLeadingConstraint,
-                             self.imageViewTrailingConstraint,
-                             self.imageViewBottomConstraint])
+        addConstraints([imageViewTopConstraint,
+                             imageViewLeadingConstraint,
+                             imageViewTrailingConstraint,
+                             imageViewBottomConstraint])
         
-        self.imageView = imageView
-        self.delegate = self
+        imageView = imView
+        delegate = self
     }
     
     fileprivate func updateMinZoomScaleForSize(_ size: CGSize) {
@@ -89,12 +80,12 @@ open class ImageScrollView: UIScrollView {
         let heightScale = size.height / imageView.bounds.height
         let minScale = min(widthScale, heightScale)
         
-        self.minimumZoomScale = minScale
+        minimumZoomScale = minScale
     }
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        updateMinZoomScaleForSize(self.bounds.size)
+        updateMinZoomScaleForSize(bounds.size)
     }
     
     fileprivate func updateConstraintsForSize(_ size: CGSize) {
@@ -107,16 +98,16 @@ open class ImageScrollView: UIScrollView {
         imageViewLeadingConstraint.constant = xOffset
         imageViewTrailingConstraint.constant = xOffset
         
-        self.layoutIfNeeded()
+        layoutIfNeeded()
     }
 }
 
 extension ImageScrollView: UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.imageView
+        return imageView
     }
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        self.updateConstraintsForSize(self.bounds.size)
+        updateConstraintsForSize(bounds.size)
     }
 }
 

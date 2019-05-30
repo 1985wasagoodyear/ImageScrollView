@@ -1,11 +1,3 @@
-//
-//  ImageScrollView.h
-//  ImageScrollView
-//
-//  Created by Kevin Yu on 11/14/18.
-//  Copyright © 2018 Kevin Yu. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for ImageScrollView.
