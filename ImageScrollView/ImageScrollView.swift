@@ -2,6 +2,8 @@ import UIKit
 
 open class ImageScrollView: UIScrollView {
 
+    // MARK: - Properties
+    
     open var image: UIImage! {
         didSet {
             imageView.image = image
@@ -10,7 +12,11 @@ open class ImageScrollView: UIScrollView {
         }
     }
     
-    open var imageView: UIImageView!
+    open var allowPanWithoutZoom = false
+    
+    open private(set) var imageView: UIImageView!
+    
+    // MARK: - Internal Re-sizing Constraints for content ImageView
     
     private var imageViewTopConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
@@ -76,11 +82,17 @@ open class ImageScrollView: UIScrollView {
     }
     
     fileprivate func updateMinZoomScaleForSize(_ size: CGSize) {
+        
+        if allowPanWithoutZoom == false {
         let widthScale = size.width / imageView.bounds.width
         let heightScale = size.height / imageView.bounds.height
         let minScale = min(widthScale, heightScale)
         
         minimumZoomScale = minScale
+        }
+        else {
+            minimumZoomScale = 1.0
+        }
     }
     
     override open func layoutSubviews() {
@@ -89,15 +101,22 @@ open class ImageScrollView: UIScrollView {
     }
     
     fileprivate func updateConstraintsForSize(_ size: CGSize) {
-        
-        let yOffset = max(0, (size.height - imageView.frame.height) / 2)
-        imageViewTopConstraint.constant = yOffset
-        imageViewBottomConstraint.constant = yOffset
-        
-        let xOffset = max(0, (size.width - imageView.frame.width) / 2)
-        imageViewLeadingConstraint.constant = xOffset
-        imageViewTrailingConstraint.constant = xOffset
-        
+        if allowPanWithoutZoom == false {
+            let yOffset = max(0, (size.height - imageView.frame.height) / 2)
+            imageViewTopConstraint.constant = yOffset
+            imageViewBottomConstraint.constant = yOffset
+            
+            let xOffset = max(0, (size.width - imageView.frame.width) / 2)
+            imageViewLeadingConstraint.constant = xOffset
+            imageViewTrailingConstraint.constant = xOffset
+        }
+        else {
+            imageViewTopConstraint.constant = (size.height - imageView.frame.height) / 2
+            imageViewBottomConstraint.constant = (size.height - imageView.frame.height) / 2
+            
+            imageViewLeadingConstraint.constant = (size.width - imageView.frame.width) / 2
+            imageViewTrailingConstraint.constant = (size.width - imageView.frame.width) / 2
+        }
         layoutIfNeeded()
     }
 }

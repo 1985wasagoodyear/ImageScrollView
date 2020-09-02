@@ -14,13 +14,14 @@ extension UIView {
 
 class ViewController: UIViewController {
 
-    @IBOutlet var imScrollView: ImageScrollView!
+    var imScrollView: ImageScrollView!
     
     override func loadView() {
         super.loadView()
         view.backgroundColor = .white
         imScrollView = ImageScrollView(frame: view.frame)
         imScrollView.setupToFill(superView: view)
+        imScrollView.allowPanWithoutZoom = true
     }
     
     override func viewDidLoad() {
